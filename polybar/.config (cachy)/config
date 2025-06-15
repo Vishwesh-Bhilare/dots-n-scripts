@@ -63,7 +63,7 @@ font-3 = FontAwesome5Free:style=Solid:pixelsize=11;3
 font-4 = FontAwesome5Brands:style=Solid:pixelsize=11;3
 
 
-modules-left = i3 sp2
+modules-left = i3 sp2 xwindow
 modules-right = cputemp sp1 battery sp2 date sp2
 
 tray-position = right
@@ -82,6 +82,11 @@ scroll-up = #i3.next
 scroll-down = #i3.prev
 
 cursor-click = pointer
+
+[module/xwindow]
+type = internal/xwindow
+label = %title:0:60:...%
+format-prefix = " "
 
 [module/sp1]
 type = custom/text
