@@ -162,7 +162,7 @@ interval = 600
 
 [module/cputemp]
 type = custom/script
-exec = ~/bin/tctl_temp.sh
+exec = ~/.config/scripts/tctl_temp.sh
 interval = 5
 
 
