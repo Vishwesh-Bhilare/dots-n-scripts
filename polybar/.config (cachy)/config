@@ -64,7 +64,7 @@ font-4 = FontAwesome5Brands:style=Solid:pixelsize=11;3
 
 
 modules-left = i3 sp2 xwindow
-modules-right = cputemp sp1 battery sp2 date sp2
+modules-right = recording sp1 cputemp sp1 battery sp2 date sp2
 
 tray-position = right
 tray-padding = 0
@@ -171,6 +171,11 @@ type = custom/script
 exec = ~/.config/polybar/scripts/arch_updates.sh
 interval = 60
 label = %output%
+
+[module/recording]
+type = custom/script
+exec = ~/.config/i3/scripts/recording_status.sh
+interval = 1
 
 [module/date]
 type = internal/date
