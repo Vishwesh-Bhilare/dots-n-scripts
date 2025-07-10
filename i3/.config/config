@@ -1,11 +1,21 @@
 # i3gaps
-gaps inner 1
-gaps outer 1
+gaps inner 10
+gaps outer 10
 
+bindsym Alt+1 exec firefox
 
 set $mod Mod4
-font pango:Hack 9
+# font pango:Hack 9
+font 0xProto 12
 floating_modifier $mod
+
+# # Toggle 1024x1024 ViewPortIn on DP-2
+# bindsym $mod+Shift+v exec --no-startup-id nvidia-settings --assign CurrentMetaMode="DP-2: 1920x1080_144 { ViewPortIn=1024x1024 }"
+# # Reset to normal full resolution (optional)
+# bindsym $mod+Shift+n exec --no-startup-id nvidia-settings --assign CurrentMetaMode="DP-2: 1920x1080_144 { ViewPortIn=1920x1080 }"
+
+# librewolf
+bindsym Shift+Ctrl+1 exec librewolf
 
 # recording toggle
 bindsym $mod+Shift+q exec --no-startup-id ~/.config/i3/scripts/toggle_recording.sh
@@ -21,10 +31,10 @@ bindsym $mod+Shift+p exec --no-startup-id pkill -x picom
 
 
 # shutdown
-bindsym $mod+Shift+Ctrl+P exec --no-startup-id systemctl poweroff
+bindsym $mod+Shift+Ctrl+P exec --no-startup-id shutdown -h now
 
 # start a terminal
-set $term alacritty
+set $term kitty
 bindsym $mod+Return exec $term
 
 # kill focused window
@@ -36,10 +46,10 @@ bindsym $mod+r exec "rofi -show combi -modi window,run,combi -combi-modi window,
 #bindsym ctrl+space exec dmenu_run
 
 # alternatively, you can use the cursor keys:
-bindsym $mod+Left focus left
-bindsym $mod+Down focus down
-bindsym $mod+Up focus up
-bindsym $mod+Right focus right
+bindsym Ctrl+Shift+a focus left
+bindsym Ctrl+Shift+s focus down
+bindsym Ctrl+Shift+w focus up
+bindsym Ctrl+Shift+d focus right
 
 # alternatively, you can use the cursor keys:
 bindsym $mod+Shift+Left move left
@@ -133,21 +143,36 @@ mode "resize" {
         bindsym $mod+r mode "default"
 }
 
-# bindsym $mod+r mode "resize"
+# bindsym $mod+Ctrl+r mode "resize"
 
 
 #
 # Status Bar:
 #
 exec_always --no-startup-id ~/.config/polybar/launch.sh
+# exec --no-startup-id polybar example
+
+
+# new_window pixel 0
 
 # class                 border  backgr. text    indicator child_border
-client.focused          #000000 #000000 #ffffff #000000   #000000
-client.focused_inactive #000000 #000000 #ffffff #000000   #000000
-client.unfocused        #000000 #000000 #888888 #000000   #000000
-client.urgent           #000000 #000000 #ffffff #000000   #000000
-client.placeholder      #000000 #000000 #ffffff #000000   #000000
-client.background       #ffffff
+# client.focused          #000000 #000000 #ffffff #000000   #000000
+# client.focused_inactive #000000 #000000 #ffffff #000000   #000000
+# client.unfocused        #000000 #000000 #888888 #000000   #000000
+# client.urgent           #000000 #000000 #ffffff #000000   #000000
+# client.placeholder      #000000 #000000 #ffffff #000000   #000000
+# client.background       #ffffff
+
+
+# class                 border    backgr.   text     indicator child_border
+client.focused          #cf6ba9   #cf6ba9   #ffffff  #cf6ba9   #cf6ba9
+client.focused_inactive #cf6ba9   #cf6ba9   #ffffff  #cf6ba9   #cf6ba9
+client.unfocused        #cf6ba9   #cf6ba9   #888888  #cf6ba9   #cf6ba9
+client.urgent           #cf6ba9   #cf6ba9   #ffffff  #cf6ba9   #cf6ba9
+client.placeholder      #cf6ba9   #cf6ba9   #ffffff  #cf6ba9   #cf6ba9
+client.background       #cf6ba9
+
+
 
 ########################################################################
 ########################################################################
@@ -171,11 +196,10 @@ for_window [title="Calculator"] floating enable
 for_window [title="Timer"] floating enable
 for_window [class="^.*"] border pixel 1
 for_window [class="librewolf"] border none
-for_window [class="firefox"] border none
+# for_window [class="firefox"] border none
 for_window [class="mpv"] floating enable
 for_window [class="imv"] floating enable
 for_window [class="zenity"] floating enable
-for_window [class="cachyos-welcome"] floating enable
 
 
 ########################################################################
@@ -218,7 +242,7 @@ bindsym XF86AudioMute exec "amixer sset Master toggle | sed -En '/\[on\]/ s/.*\[
 # exec xrandr --output HDMI-1 --mode 1920x1080 --rate 144 --scale 1x1
 #exec xrandr --auto --output HDMI-1 --mode 1920x1080 --above HDMI-2
 
-exec feh --bg-fill ~/.config/i3/wallpaper.png
+
 
 exec --no-startup-id xrandr --output DP-2 --mode 1920x1080 --rate 144
 exec --no-startup-id dunst
@@ -227,5 +251,19 @@ exec --no-startup-id redshift
 exec --no-startup-id dex -a -s /etc/xdg/autostart/:~/.config/autostart/
 exec --no-startup-id /usr/lib/polkit-gnome/polkit-gnome-authentication-agent-1
 
+# nvidia-settings profile load
+exec --no-startup-id nvidia-settings --load-config-only
+
+# disable screen timeout
+exec --no-startup-id xset s off -dpms s noblank
+
+# disbale X's mouse accel
+exec --no-startup-id xset m 0 0
+
 exec_always mkfifo /tmp/xobpipe && tail -f /tmp/xobpipe | xob -t 2170 & disown
 #exec ~/.i3/launch.sh
+
+# pywal restore last colour scheme & set wallpaper
+# exec_always --no-startup-id wal -i ~/.config/i3/wallpaper.png -n && feh --bg-fill ~/.config/i3/wallpaper2.png
+exec feh --bg-fill ~/.config/i3/wallpaper2.png
+# exec_always --no-startup-id wal -i ~/.config/i3/scripts/pwal.sh
