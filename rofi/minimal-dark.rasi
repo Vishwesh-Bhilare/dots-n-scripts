@@ -1,0 +1,57 @@
+* {
+  background-color: #1e1e2e;
+  text-color: #cdd6f4;
+  border-color: #F5C2E7;
+
+  spacing: 4;
+  padding: 4;
+  font: "Google Sans 15";
+}
+
+window {
+  background-color: @background-color;
+  border: 2;
+  padding: 4;
+  location: northwest;
+  anchor: northwest;
+  width: 500px;
+  height: 400px;
+}
+
+mainbox {
+  children: [ inputbar, listview ];
+  spacing: 4;
+}
+
+inputbar {
+  background-color: @background-color;
+  padding: 2;
+  border: 0;
+  width: 6em;
+}
+
+textbox-prompt-colon {
+  text-color: @text-color;
+}
+
+listview {
+  background-color: @background-color;
+  scrollbar: false;
+  border: 0;
+  padding: 0 0 0 0;
+}
+
+element {
+  padding: 0 0;
+  background-color: transparent;
+  text-color: @text-color;
+}
+
+element selected {
+  background-color: #313244;
+  text-color: #f5c2e7;
+}
+
+element-text {
+  highlight: bold;
+}

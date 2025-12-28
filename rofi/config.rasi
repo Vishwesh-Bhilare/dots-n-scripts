@@ -1,0 +1,42 @@
+@theme "minimal-dark"
+
+configuration {
+    font: "Google Sans 12";
+    lines: 1;
+    fixed-num-lines: true;
+    show-icons: true;
+    hide-scrollbar: false;
+}
+
+
+// configuration {
+//     font: "Google Sans 10";
+//     show-icons: false;
+//     lines: 1;
+//     width: 5;
+//     location: 0;
+//     padding: 0;
+//     fixed-num-lines: true;
+//     fullscreen: false;
+//     disable-history: true;
+//     hide-scrollbar: true;
+//     sidebar-mode: false;
+//     sort: false;
+//     markup-rows: false;
+//     case-sensitive: true;
+//     matching: "fuzzy";
+//     lazy-filter: true;
+//     filter: "";
+// }
+
+/**
+* {
+    background: #81D4FA;
+    foreground: #272727;
+    border-color: #444444;
+    selected-background: #444444;
+    selected-foreground: #ffffff;
+    border-radius: 0px;
+    spacing: 2px;
+}
+**/
