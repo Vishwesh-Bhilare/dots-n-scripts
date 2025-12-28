@@ -34,4 +34,4 @@ require("plugins.which_key")
 require("config.starter")
 
 -- Theme
-vim.cmd.colorscheme "catppuccin-mocha"
+-- vim.cmd.colorscheme "catppuccin-mocha"
