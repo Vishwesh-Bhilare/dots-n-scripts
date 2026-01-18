@@ -1,0 +1,13 @@
+#!/bin/sh
+
+# display first
+xrandr --output DP-2 --mode 1920x1080 --rate 144 &
+
+# wallpaper
+feh --bg-fill Pictures/github/wallhaven-k8385q_1920x1080.png &
+
+# picom
+picom &
+
+# status bar
+dwmblocks &
