@@ -23,7 +23,7 @@ dwm-xrdb-6.4.diff - xresource database colors
 */
 
 /* appearance */
-static unsigned int borderpx        = 1;        /* border pixel of windows */
+static unsigned int borderpx        = 2;        /* border pixel of windows */
 static unsigned int snap            = 32;       /* snap pixel */
 static const unsigned int gappih    = 20;       /* horiz inner gap between windows */
 static const unsigned int gappiv    = 20;       /* vert inner gap between windows */
@@ -45,8 +45,8 @@ static const char *fonts[]          = { "monospace:size=10", "Hack Nerd Font Mon
 /* default colors used if xrdb is not loaded */
 static char normbgcolor[]           = "#232b3b";
 static char normbordercolor[]       = "#4c566a";
-static char normfgcolor[]           = "#7F80A8";
-static char selfgcolor[]            = "#7F80A8";
+static char normfgcolor[]           = "#737EC5";
+static char selfgcolor[]            = "#31339e";
 static char selbordercolor[]        = "#737EC5";
 static char selbgcolor[]            = "#737EC5";
 
@@ -56,7 +56,8 @@ static char *colors[][3] = {
 		[SchemeSel]  = { selbgcolor,  selfgcolor,  selbordercolor  },
 		/* for bar --> {text, background, null} */
 		[SchemeStatus]  = { normfgcolor, normbgcolor,  normbgcolor  }, /* status R */
-		[SchemeTagsSel]  = { normfgcolor, normbgcolor,  normbgcolor  }, /* tag L selected */
+		/* [SchemeTagsSel]  = { normfgcolor, normbgcolor,  normbgcolor  }, tag L selected */
+		[SchemeTagsSel]  = { "#232b3b", "#737EC5",  "#737EC5"  },
 		[SchemeTagsNorm]  = { selbordercolor, normbgcolor,  normbgcolor  }, /* tag L unselected */
 		[SchemeInfoSel] = { "#0A090C", "#737EC5", "#737EC5" }, /* info M selected */
 		[SchemeInfoNorm]  = { normfgcolor, normbgcolor,  normbgcolor  }, /* info M unselected */
@@ -228,11 +229,11 @@ static const Key keys[] = {
 
 
 /* application bindings */
-	{ MODKEY,			XK_m,          spawn,      {.v = (const char*[]){ "st", "-e", "termusic", NULL } } },
+	{ MODKEY,			XK_m,          spawn,      {.v = (const char*[]){ "kitty", "-e", "termusic", NULL } } },
 	{ MODKEY,			XK_w,          spawn,      {.v = (const char*[]){ BROWSER, NULL } } },
-	{ MODKEY,			XK_f,          spawn,      {.v = (const char*[]){ "st", "-e", "fff", NULL } } },
-	{ MODKEY,			XK_n,          spawn,      {.v = (const char*[]){ "st", "-e", "nvim", NULL } } },
-	{ MODKEY|ShiftMask,	XK_h,          spawn,      {.v = (const char*[]){ "st", "-e", "htop", NULL } } },
+	{ MODKEY,			XK_f,          spawn,      {.v = (const char*[]){ "kitty", "-e", "fff", NULL } } },
+	{ MODKEY,			XK_n,          spawn,      {.v = (const char*[]){ "kitty", "-e", "nvim", NULL } } },
+	{ MODKEY|ShiftMask,	XK_h,          spawn,      {.v = (const char*[]){ "kitty", "-e", "htop", NULL } } },
 	{ MODKEY,			XK_p,          spawn,      {.v = (const char*[]){ "darktable", NULL } } },
 	
 	/* Screenshot - use array syntax */
@@ -253,6 +254,12 @@ static const Key keys[] = {
 	{ MODKEY,				XK_F2,     spawn,       {.v = (const char*[]){ "vb", NULL } } },
 	{ MODKEY|ShiftMask,		XK_F2,     spawn,       {.v = (const char*[]){ "dmenutemp", NULL } } },
 	{ MODKEY,				XK_F3,     spawn,       {.v = (const char*[]){ "phototransfer", NULL } } },
+
+	/* Kill picom */
+	{ MODKEY|ControlMask|ShiftMask, XK_p, spawn, {.v = (const char*[]){ "pkill", "-9", "picom", NULL } } },
+
+	/* Start/Restart picom */
+	{ MODKEY|ControlMask, XK_p, spawn, {.v = (const char*[]){ "picom", NULL } } },
 
 
 /* other bindings */
