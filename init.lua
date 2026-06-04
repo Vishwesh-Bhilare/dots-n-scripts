@@ -40,6 +40,8 @@ Plug('MeanderingProgrammer/render-markdown.nvim') --render md inline
 Plug('emmanueltouzery/decisive.nvim') --view csv files
 Plug('folke/twilight.nvim') --surrounding dim
 
+Plug('nvim-treesitter/nvim-treesitter', { ['do'] = ':TSUpdate' })
+
 vim.call('plug#end')
 
 -- move config and plugin config to alternate files
@@ -73,7 +75,6 @@ require("plugins.autopairs")
 require("plugins.fterm")
 require("plugins.fzf-lua")
 require("plugins.nvim-tree")
-require("plugins.treesitter")
 require("plugins.twilight")
 require("plugins.which-key")
 end, 100)

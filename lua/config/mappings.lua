@@ -1,4 +1,5 @@
 -- mappings, including plugins
+local run = require("run")
 
 local function map(m, k, v)
 	vim.keymap.set(m, k, v, { noremap = true, silent = true })
@@ -52,15 +53,41 @@ map("n", "<leader>Fr", ":lua require('fzf-lua').resume()<CR>") --last search
 map("n", "<leader>g", ":lua require('fzf-lua').grep()<CR>") --grep
 map("n", "<leader>G", ":lua require('fzf-lua').grep_cword()<CR>") --grep word under cursor
 
+-- CLIPBOARD - COPY FROM NEOVIM TO OUTSIDE
+-- Visual mode: copy selected text to clipboard
+map("v", "<leader>y", '"+y')
+map("v", "<C-c>", '"+y')  -- Ctrl+C like other editors
+
+-- Normal mode: copy to clipboard
+map("n", "<leader>yy", '"+yy')  -- Copy current line
+map("n", "<leader>Y", '"+y$')   -- Copy to end of line
+map("n", "<leader>ya", ':%y+<CR>')  -- Copy entire file
+
+-- Paste from clipboard to Neovim
+map("n", "<leader>p", '"+p')  -- Paste after cursor
+map("n", "<leader>P", '"+P')  -- Paste before cursor
+map("i", "<C-v>", '<C-r>+')   -- Ctrl+V in insert mode
+
+-- Cut to clipboard
+map("v", "<leader>x", '"+x')   -- Cut selected text
+map("n", "<leader>xx", '"+dd') -- Cut current line
+
+-- Delete without copying (black hole register)
+map("n", "<leader>d", '"_d')
+map("v", "<leader>d", '"_d')
+
+-- Primary selection (X11 middle-click)
+map("v", "<leader>m", '"*y')  -- Copy to primary selection
+map("n", "<leader>m", '"*yy') -- Copy line to primary
+
 -- misc
 map("n", "<leader>s", ":%s//g<Left><Left>") --replace all
 map("n", "<leader>t", ":NvimTreeToggle<CR>") --open file explorer
-map("n", "<leader>p", switch_theme) --cycle themes
 map("n", "<leader>P", ":PlugInstall<CR>") --vim-plug
 map('n', '<leader>z', ":lua require('FTerm').open()<CR>") --open term
 map('t', '<Esc>', '<C-\\><C-n><CMD>lua require("FTerm").close()<CR>') --preserves session
 map("n", "<leader>w", ":w<CR>") --write but one less key
-map("n", "<leader>d", ":w ") --duplicate to new name
+map("n", "<leader>dd", ":w ") --duplicate to new name
 map("n", "<leader>x", "<cmd>!chmod +x %<CR>") --make a file executable
 map("n", "<leader>mv", ":!mv % ") --move a file to a new dir
 map("n", "<leader>R", ":so %<CR>") --reload neovim config
@@ -95,4 +122,37 @@ map("n", "<leader>nn", function() --toggle relative vs absolute line numbers
 	else
 		vim.wo.relativenumber = true
 	end
+end)
+
+-- Run current file in floating window
+map("n", "<leader>r", function() 
+    require("run").run_file() 
+end)
+
+-- Run in split terminal (alternative)
+map("n", "<leader>R", function()
+    require("run").run_in_terminal()
+end)
+
+-- Debug current file
+map("n", "<leader>D", function()
+    require("run").debug_file()
+end)
+
+-- Compile only
+map("n", "<leader>cc", function()
+    vim.cmd("w")
+    local filetype = vim.bo.filetype
+    local filename = vim.fn.expand("%:p")
+    local filename_no_ext = vim.fn.expand("%:r")
+    
+    if filetype == "c" then
+        vim.cmd("term gcc -o " .. vim.fn.shellescape(filename_no_ext) .. "_out " .. vim.fn.shellescape(filename))
+    elseif filetype == "cpp" then
+        vim.cmd("term g++ -std=c++17 -o " .. vim.fn.shellescape(filename_no_ext) .. "_out " .. vim.fn.shellescape(filename))
+    elseif filetype == "java" then
+        vim.cmd("term javac " .. vim.fn.shellescape(filename))
+    else
+        print("Compile only supported for C/C++/Java")
+    end
 end)
