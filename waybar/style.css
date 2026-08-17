@@ -1,0 +1,107 @@
+/* ~/.config/waybar/style.css */
+
+* {
+    font-family: "Inter", "JetBrainsMono Nerd Font", "Font Awesome 6 Free";
+    font-size: 15px;
+    min-height: 0;
+}
+
+window#waybar {
+    background: rgba(20, 20, 20, 0.85);
+    color: #e0e0e0;
+    border-radius: 10px;
+}
+
+#workspaces button {
+    padding: 0 8px;
+    color: #888888;
+    background: transparent;
+}
+
+#workspaces button.focused {
+    color: #e0e0e0;
+    border-bottom: 2px solid #89b4fa;
+}
+
+/* focused window title, left of the bar: workspaces | window title */
+#window {
+    font-style: italic;
+    color: #888888;
+    padding: 0 10px;
+    border-left: 1px solid #444444;
+}
+
+/* pipe-style dividers between the right-hand modules,
+   same idea as delim = " | " in dwmblocks */
+#custom-weather,
+#temperature,
+#memory,
+#battery,
+#clock {
+    padding: 0 10px;
+    border-right: 1px solid #444444;
+}
+
+#clock {
+    border-right: none;
+    padding-right: 4px;
+}
+
+#custom-media {
+    padding: 0 10px;
+    color: #a6e3a1;
+}
+
+#custom-media.paused {
+    color: #f9e2af;
+}
+
+#custom-media.stopped {
+    color: #6c7086;
+}
+
+#battery.warning {
+    color: #f9e2af;
+}
+
+#battery.critical {
+    color: #f38ba8;
+}
+
+#temperature.critical {
+    color: #f38ba8;
+}
+
+#tray {
+    padding-left: 10px;
+    padding-right: 10px;
+    border-right: 1px solid #444444;
+}
+
+#custom-network {
+    padding: 0 10px;
+    border-right: 1px solid #444444;
+}
+
+#custom-bluetooth {
+    padding: 0 10px;
+    border-right: 1px solid #444444;
+	font-size: 18px;
+}
+
+ 
+#custom-network.disabled,
+#custom-bluetooth.disabled {
+    color: #888888;
+}
+ 
+#custom-network.enabled,
+#custom-bluetooth.enabled {
+    color: #e0e0e0;
+}
+ 
+#custom-network.connected,
+#custom-bluetooth.connected {
+    color: #a6e3a1;
+}
+

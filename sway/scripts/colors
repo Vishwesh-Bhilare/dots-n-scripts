@@ -1,0 +1,11 @@
+# Seed values matching your current theme.
+# Overwritten automatically by update-sway-colors.sh after each `wal -i`.
+# Included from your main config via: include ~/.config/sway/colors
+#
+# class                   border       background   text         indicator    child_border
+client.focused            #7F8B94      #7F8B94      #c1cbc2      #7F8B94      #7F8B94
+client.focused_inactive   #4c566a      #232b3b      #7F8B94      #4c566a      #4c566a
+client.unfocused          #4c566a      #232b3b      #7F8B94      #4c566a      #4c566a
+client.urgent             #bf616a      #bf616a      #c1cbc2      #bf616a      #bf616a
+
+output * bg #232b3b solid_color

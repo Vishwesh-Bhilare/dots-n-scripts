@@ -1,0 +1,228 @@
+# bread's dwm build, ported to sway
+#
+# Model differences from dwm you should know going in:
+#  - dwm = master-stack, dynamic tiling. sway = manual binary-tree splits (i3 model).
+#    There's no "nmaster"/"mfact"/"zoom"/"spiral"/"dwindle" equivalent -- those
+#    binds are dropped or approximated below (noted inline).
+#  - h/j/k/l are now spatial focus movement (sway/i3 convention), not stack
+#    navigation + mfact like in your dwm config. This is the biggest habit change.
+#  - dmenu moved to $mod+d (sway default) so $mod+r stays free for the built-in
+#    resize mode. Swap them back below if you'd rather keep r=launcher.
+#  - No xrdb, no picom (sway composites natively), no bulkill, no multi-tag view.
+
+### Variables
+set $mod Mod4
+set $term kitty
+set $menu wofi -S drun
+
+include ~/.config/sway/colors
+
+### Appearance (from your dwm colors)
+# normbgcolor #232b3b / normbordercolor #4c566a / normfgcolor #7F8B94
+# selbgcolor  #7F8B94 / selfgcolor      #c1cbc2 / selbordercolor #7F8B94
+# client.focused          #7F8B94 #7F8B94 #c1cbc2 #7F8B94 #7F8B94
+# client.focused_inactive #4c566a #232b3b #7F8B94 #4c566a #4c566a
+# client.unfocused        #4c566a #232b3b #7F8B94 #4c566a #4c566a
+# client.urgent            #bf616a #bf616a #c1cbc2 #bf616a #bf616a
+
+
+
+default_border pixel 2
+default_floating_border pixel 2
+gaps inner 15
+gaps outer 5
+exec_always swaymsg gaps outer all set 5
+exec_always swaymsg gaps inner all set 15
+smart_gaps off
+
+# custom execs
+exec autotiling
+
+# control display power
+bindsym $mod+Shift+o output eDP-1 power toggle
+
+# ~/.config/sway/config additions
+
+# --- swayosd: start the server once per session ---
+exec swayosd-server
+
+# --- optional: caps-lock indicator needs this backend running once, system-wide ---
+# sudo systemctl enable --now swayosd-libinput-backend.service
+
+# --- volume / mic ---
+bindsym XF86AudioRaiseVolume  exec swayosd-client --output-volume raise
+bindsym XF86AudioLowerVolume  exec swayosd-client --output-volume lower
+bindsym XF86AudioMute         exec swayosd-client --output-volume mute-toggle
+bindsym XF86AudioMicMute      exec swayosd-client --input-volume mute-toggle
+
+# --- brightness ---
+bindsym XF86MonBrightnessUp   exec swayosd-client --brightness raise
+bindsym XF86MonBrightnessDown exec swayosd-client --brightness lower
+
+# --- caps lock (optional, needs the libinput-backend service above) ---
+bindsym --release Caps_Lock exec swayosd-client --caps-lock
+
+font pango:Inter 12
+
+### Output / Input
+# output eDP-1 resolution 1920x1080@143.998Hz
+# output eDP-1 adaptive_sync on
+output * resolution 1920x1080@143.998Hz
+output * adaptive_sync on
+
+# output * bg #232b3b solid_color
+
+input type:touchpad {
+    tap enabled
+    natural_scroll enabled
+    dwt enabled
+    accel_profile flat
+    pointer_accel 0
+}
+
+input type:pointer {
+    accel_profile flat
+    pointer_accel 0
+}
+
+### Idle / lock (swaps slock -> swaylock)
+# exec swayidle -w \
+#    timeout 600 'swaylock -f -c 232b3b' \
+#    before-sleep 'swaylock -f -c 232b3b'
+
+    # window rules
+	for_window [app_id="^.*"] border pixel 2
+	for_window [app_id="kitty"] opacity 0.80
+	for_window [app_id="floating-btop"] floating enable, resize set 1300 1000, border pixel 2
+
+exec_always dbus-update-activation-environment --systemd WAYLAND_DISPLAY XDG_CURRENT_DESKTOP=sway
+
+### Basics
+bindsym $mod+Return exec $term
+bindsym $mod+r exec $menu
+bindsym $mod+q kill
+bindsym $mod+Shift+c reload
+# bindsym $mod+Shift+BackSpace exec swaynag -t warning -m 'Exit sway?' -B 'Yes' 'swaymsg exit'
+bindsym $mod+Shift+BackSpace exec swaymsg exit
+
+floating_modifier $mod normal
+
+### Focus / move (h/j/k/l replace dwm's stack-cycling j/k)
+bindsym $mod+h focus left
+bindsym $mod+j focus down
+bindsym $mod+k focus up
+bindsym $mod+l focus right
+bindsym $mod+Shift+h move left
+bindsym $mod+Shift+j move down
+bindsym $mod+Shift+k move up
+bindsym $mod+Shift+l move right
+
+### Layout (approximate mappings -- no true master-stack in sway)
+bindsym $mod+t layout splith          # closest thing to dwm's tile
+bindsym $mod+s layout stacking
+bindsym $mod+Shift+m layout tabbed    # stands in for dwm's monocle (w is taken by firefox)
+bindsym $mod+e layout toggle split
+bindsym $mod+f fullscreen
+bindsym $mod+Shift+space floating toggle
+# bindsym $mod+space focus mode_toggle
+bindsym $mod+Shift+s sticky toggle
+bindsym $mod+b splith           # use $mod+e to flip orientation instead of a dedicated splitv key (v is taken by copyq)
+
+### Resize (replaces dwm's mfact h/l, since h/l are now focus)
+mode "resize" {
+    bindsym h resize shrink width 20px
+    bindsym l resize grow width 20px
+    bindsym j resize grow height 20px
+    bindsym k resize shrink height 20px
+    bindsym Return mode "default"
+    bindsym Escape mode "default"
+}
+bindsym $mod+Shift+r mode "resize"
+
+### Gaps (reuses your minus/equal + alt+i/o scheme; no separate h/v gap control in sway)
+bindsym $mod+minus gaps inner current minus 3, gaps outer current minus 3
+bindsym $mod+equal gaps inner current plus 3, gaps outer current plus 3
+bindsym $mod+Shift+minus gaps inner current set 20, gaps outer current set 20
+bindsym $mod+Mod1+i gaps inner current plus 5
+bindsym $mod+Mod1+Shift+i gaps inner current minus 5
+bindsym $mod+Mod1+o gaps outer current plus 5
+bindsym $mod+Mod1+Shift+o gaps outer current minus 5
+
+### Tags -> workspaces (you had 9 tags, not 10 -- dropped bind 0)
+bindsym $mod+1 workspace number 1
+bindsym $mod+2 workspace number 2
+bindsym $mod+3 workspace number 3
+bindsym $mod+4 workspace number 4
+bindsym $mod+5 workspace number 5
+bindsym $mod+6 workspace number 6
+bindsym $mod+7 workspace number 7
+bindsym $mod+8 workspace number 8
+bindsym $mod+9 workspace number 9
+bindsym $mod+Shift+1 move container to workspace number 1
+bindsym $mod+Shift+2 move container to workspace number 2
+bindsym $mod+Shift+3 move container to workspace number 3
+bindsym $mod+Shift+4 move container to workspace number 4
+bindsym $mod+Shift+5 move container to workspace number 5
+bindsym $mod+Shift+6 move container to workspace number 6
+bindsym $mod+Shift+7 move container to workspace number 7
+bindsym $mod+Shift+8 move container to workspace number 8
+bindsym $mod+Shift+9 move container to workspace number 9
+
+### Multi-monitor
+bindsym $mod+bracketright focus output right
+bindsym $mod+bracketleft focus output left
+bindsym $mod+Shift+bracketright move container to output right
+bindsym $mod+Shift+bracketleft move container to output left
+
+### Applications (kitty stays -- runs fine under XWayland/native)
+bindsym $mod+m exec $term -e termusic
+bindsym $mod+w exec firefox
+bindsym $mod+o exec $term -e yazi
+bindsym $mod+n exec $term -e nvim
+bindsym $mod+Shift+b exec $term -e btop
+
+### Clipboard (copyq works via XWayland; consider cliphist for native wayland later)
+bindsym $mod+v exec copyq menu
+bindsym $mod+Shift+v exec copyq show
+bindsym $mod+Ctrl+v exec copyq clear
+
+### Your custom scripts (paths unchanged -- check for X11-only tools inside them,
+### e.g. scrot/xdotool/feh/xrandr calls will need swapping for wayland equivalents)
+bindsym $mod+Shift+n exec /home/vishy/dwm-src/scripts/shortcuts-menus/notes
+bindsym $mod+Shift+a exec /home/vishy/dwm-src/scripts/shortcuts-menus/dmenuvids
+bindsym $mod+Shift+w exec /home/vishy/.config/sway/scripts/wallpaper-launcher.sh
+bindsym $mod+F1 exec mkdir -p ~/Pictures/screenshots && grim ~/Pictures/screenshots/$(date +%Y-%m-%d_%H-%M-%S).png
+bindsym $mod+Shift+F1 exec grim -g "$(slurp)" - | wl-copy -t image/png
+bindsym $mod+F2 exec /home/vishy/dwm-src/scripts/shell/vb
+bindsym $mod+Shift+F2 exec /home/vishy/dwm-src/scripts/shortcuts-menus/temp
+bindsym $mod+F3 exec /home/vishy/dwm-src/scripts/images-photos-wallpapers/phototransfer
+
+### Screenshot (maim+xclip -> grim+slurp+wl-copy, wayland-native)
+bindsym $mod+Shift+p exec grim -g "$(slurp)" - | wl-copy -t image/png
+
+### Media / brightness / volume
+bindsym --locked XF86AudioPlay exec playerctl -p termusic play-pause
+bindsym $mod+F11 exec playerctl -p termusic play-pause
+bindsym $mod+Shift+F11 exec playerctl play-pause
+bindsym $mod+F12 exec playerctl -p termusic next
+bindsym $mod+F10 exec playerctl -p termusic previous
+bindsym $mod+F8 exec swaylock
+bindsym $mod+Shift+F8 exec swaylock && systemctl suspend -i
+bindsym $mod+F7 exec status-timer
+bindsym $mod+Shift+F7 exec status-timer cleanup
+bindsym --locked XF86AudioRaiseVolume exec amixer -D pulse sset Master 5%+
+bindsym --locked XF86AudioLowerVolume exec amixer -D pulse sset Master 5%-
+bindsym --locked XF86MonBrightnessUp exec brightnessctl set 5%+
+bindsym --locked XF86MonBrightnessDown exec brightnessctl set 5%-
+
+### Bar (swaps dwmblocks for a simple status_command -- see note below re: waybar)
+bar {
+    swaybar_command waybar
+}
+
+# floating windows and resize
+floating_modifier $mod normal
+bindsym $mod+space floating toggle
+# bindsym $mod+Shift+space mode_toggle
+
+include /etc/sway/config.d/*

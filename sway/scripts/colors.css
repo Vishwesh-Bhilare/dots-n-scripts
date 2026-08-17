@@ -1,0 +1,10 @@
+/* Seed values matching your current theme.
+   Overwritten automatically by update-sway-colors.sh after each `wal -i`. */
+@define-color bg       #232b3b;
+@define-color fg       #7F8B94;
+@define-color accent   #7F8B94;
+@define-color muted    #4c566a;
+@define-color urgent   #bf616a;
+@define-color warning  #ebcb8b;
+@define-color charging #a3be8c;
+@define-color select   #c1cbc2;

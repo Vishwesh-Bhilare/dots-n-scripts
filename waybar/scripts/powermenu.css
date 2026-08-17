@@ -1,0 +1,14 @@
+window {
+    background: #1e1e2e;
+    border-radius: 12px;
+    border: 1px solid #313244;
+}
+#entry {
+    color: #cdd6f4;
+    padding: 8px;
+}
+#entry:selected {
+    background: #89b4fa;
+    color: #1e1e2e;
+    border-radius: 8px;
+}
